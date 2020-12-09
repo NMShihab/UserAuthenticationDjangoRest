@@ -7,11 +7,14 @@ import random,string
 from rest_framework import APIView
 from .serializers import LoginSerialzier
 from django.contrib.auth import authenticate
+from rest_framework import Response
 
 
 
 def get_random_data(length):
     ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
+
+
 
 
 
@@ -40,4 +43,11 @@ class LoginView(APIView):
             password = serializer.validated_data['password']
         )
 
+        if not user:
+            return Response({"error": "invalid email or password"},status = "400")
+
+        access = get_access_token({'user_id' : user.id})
+        refresh = get_refresh_token()
+
+        return Response({"access": access,"refresh" : refresh})
          
