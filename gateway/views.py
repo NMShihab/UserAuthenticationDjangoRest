@@ -4,33 +4,33 @@ from user.models import CustomUser
 from datetime import datetime,timedelta
 from django.conf import settings
 import random,string
-from rest_framework import APIView
+from rest_framework.views import APIView
 from .serializers import LoginSerialzier
 from django.contrib.auth import authenticate
-from rest_framework import Response
+from rest_framework.response import Response
 
 
 
 def get_random_data(length):
-    ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
 
 
 
 
 
 def get_access_token(payload):
-    return jwt.encode{
+    return jwt.encode(
         {"exp": datetime.now() + timedelta(minutes=5),**payload},
         settings.SECRET_KEY,
         algorithm = "HS256"
-    }
+    )
 
 def get_refresh_token():
-    return jwt.encode{
+    return jwt.encode(
         {"exp": datetime.now() + timedelta(days=365),"data":get_random_data(10)},
         settings.SECRET_KEY,
         algorithm = "HS256"
-    }
+    )
 
 class LoginView(APIView):
     serializer_class = LoginSerialzier
